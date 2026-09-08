@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Trường Bộ Xử Lí - Tin Học 9</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            padding: 30px;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 5px;
+            font-size: 26px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #22c55e;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .question-title {
+            font-weight: bold;
+            color: #2a5298;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .img-container {
+            width: 100%;
+            height: 240px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #cbd5e1;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .question-text {
+            font-size: 16px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            color: #334155;
+            min-height: 45px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn:hover {
+            background-color: #cbd5e1;
+        }
+
+        .btn.correct {
+            background-color: #22c55e !important;
+            color: white !important;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
+        }
+
+        .btn.incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+        }
+
+        .btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .explanation {
+            background-color: #e0f2fe;
+            border-left: 4px solid #0284c7;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #0369a1;
+            display: none;
+            text-align: left;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .score-board {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .next-btn {
+            background-color: #1e3c72;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            transition: background 0.2s;
+        }
+
+        .next-btn:hover {
+            background-color: #2a5298;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>THẾ GIỚI KĨ THUẬT SỐ</h1>
+    <p class="subtitle">Thử thách: Thiết bị dưới đây có gắn bộ xử lí thông tin hay không?</p>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="card">
+        <div class="question-title" id="qTitle">Câu 1 / 6</div>
+        
+        <div class="img-container">
+            <img id="qImage" src="" alt="Hình minh họa thiết bị">
+        </div>
+
+        <div class="question-text" id="qText">Nội dung câu hỏi...</div>
+
+        <div class="btn-group">
+            <button class="btn" id="btnYes" onclick="checkAnswer(true)">CÓ</button>
+            <button class="btn" id="btnNo" onclick="checkAnswer(false)">KHÔNG</button>
+        </div>
+
+        <div class="explanation" id="expBox"></div>
+    </div>
+
+    <div class="footer-nav">
+        <div class="score-board">
+            Điểm số: <span id="score">0</span> / <span id="total">6</span>
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Câu tiếp theo ➔</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            id: 1,
+            title: "Câu 1: Quạt bàn cơ",
+            text: "Chiếc quạt bàn bấm nút chuyển số cơ học ở nhà em.",
+            answer: false,
+            image: "https://images.unsplash.com/photo-1618941716939-553df3c6c278?w=600&auto=format&fit=crop",
+            explain: "<b>Giải thích:</b> Đóng/mở mạch điện trực tiếp cơ học, không có bộ xử lí dữ liệu dạng bit."
+        },
+        {
+            id: 2,
+            title: "Câu 2: Nồi cơm điện tử",
+            text: "Nồi cơm điện tử có hẹn giờ và chọn chế độ nấu tự động.",
+            answer: true,
+            image: "https://images.unsplash.com/photo-1544233726-9f1d2b27be8b?w=600&auto=format&fit=crop",
+            explain: "<b>Giải thích:</b> Tiếp nhận cảm biến nhiệt/nút bấm (Đầu vào) ➔ Vi xử lí tính toán ➔ Tự điều chỉnh nhiệt độ và chế độ nấu (Đầu ra)."
+        },
+        {
+            id: 3,
+            title: "Câu 3: Robot hút bụi",
+            text: "Robot hút bụi di chuyển thông minh, tự động né vật cản.",
+            answer: true,
+            // Đã thay thế ảnh chuẩn robot hút bụi hình tròn
+            image: "https://images.unsplash.com/photo-1616401784845-180882ba9ba8?w=600&auto=format&fit=crop",
+            explain: "<b>Giải thích:</b> Cảm biến khoảng cách/laser (Đầu vào) ➔ Bộ xử lí tính toán bản đồ ➔ Điều khiển bánh xe đổi hướng (Đầu ra)."
+        },
+        {
+            id: 4,
+            title: "Câu 4: Đồng hồ kim chạy pin",
+            text: "Chiếc đồng hồ kim chạy bằng pin thông thường.",
+            answer: false,
+            image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=600&auto=format&fit=crop",
+            explain: "<b>Giải thích:</b> Chỉ sử dụng tinh thể thạch anh dao động làm quay bộ cơ bánh răng, không xử lí thông tin số."
+        },
+        {
+            id: 5,
+            title: "Câu 5: Đồng hồ thông minh",
+            text: "Smartwatch đo nhịp tim, đếm bước chân và hiển thị thông báo.",
+            answer: true,
+            image: "https://images.unsplash.com/photo-1510017803434-a899398421b3?w=600&auto=format&fit=crop",
+            explain: "<b>Giải thích:</b> Cảm biến quang/gia tốc (Đầu vào) ➔ Vi xử lí phân tích dữ liệu ➔ Hiển thị lên màn hình (Đầu ra)."
+        },
+        {
+            id: 6,
+            title: "Câu 6: Cửa cuốn tự động",
+            text: "Cửa cuốn thông minh tự động dừng lại khi phát hiện có vật cản.",
+            answer: true,
+            // Đã thay thế ảnh chuẩn cửa cuốn kim loại của nhà ở/cửa hàng
+            image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&auto=format&fit=crop",
+            explain: "<b>Giải thích:</b> Cảm biến lực/hồng ngoại (Đầu vào) ➔ Mạch xử lí tín hiệu nguy hiểm ➔ Tắt motor để dừng cửa (Đầu ra)."
+        }
+    ];
+
+    let currentIndex = 0;
+    let score = 0;
+
+    document.getElementById('total').innerText = questions.length;
+
+    function loadQuestion() {
+        const q = questions[currentIndex];
+        document.getElementById('qTitle').innerText = `${q.title} (${currentIndex + 1}/${questions.length})`;
+        document.getElementById('qText').innerText = q.text;
+        document.getElementById('qImage').src = q.image;
+        document.getElementById('expBox').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+
+        const fillPercent = (currentIndex / questions.length) * 100;
+        document.getElementById('progressFill').style.width = `${fillPercent}%`;
+
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        
+        btnYes.className = 'btn';
+        btnNo.className = 'btn';
+        btnYes.onclick = () => checkAnswer(true);
+        btnNo.onclick = () => checkAnswer(false);
+    }
+
+    function checkAnswer(userChoice) {
+        const q = questions[currentIndex];
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        const expBox = document.getElementById('expBox');
+
+        btnYes.classList.add('disabled');
+        btnNo.classList.add('disabled');
+        btnYes.onclick = null;
+        btnNo.onclick = null;
+
+        if (userChoice === q.answer) {
+            score++;
+            document.getElementById('score').innerText = score;
+            if (userChoice === true) btnYes.classList.add('correct');
+            else btnNo.classList.add('correct');
+        } else {
+            if (userChoice === true) {
+                btnYes.classList.add('incorrect');
+                btnNo.classList.add('correct');
+            } else {
+                btnNo.classList.add('incorrect');
+                btnYes.classList.add('correct');
+            }
+        }
+
+        expBox.innerHTML = q.explain;
+        expBox.style.display = 'block';
+
+        const nextBtn = document.getElementById('nextBtn');
+        if (currentIndex < questions.length - 1) {
+            nextBtn.innerText = 'Câu tiếp theo ➔';
+            nextBtn.style.display = 'inline-block';
+        } else {
+            document.getElementById('progressFill').style.width = '100%';
+            nextBtn.innerText = 'Hoàn thành 🏆';
+            nextBtn.style.display = 'inline-block';
+            nextBtn.onclick = finishGame;
+        }
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        loadQuestion();
+    }
+
+    function finishGame() {
+        alert(`CHÚC MỪNG EM ĐÃ HOÀN THÀNH BÀI TẬP!\n\nKết quả: ${score} / ${questions.length} câu đúng.`);
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
